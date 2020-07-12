@@ -6,7 +6,7 @@
 
 Drupal’s configuration management system is mature enough to support many styles of management beyond the default and each have significant implications for IT, content authors, and stakeholders. Which one is right for you?
 
-In this session, we will briefly cover the principles of enterprise configuration management in Drupal and the criteria that makes one model different from the other. Then, we’ll dig into the different models for configuration management, talking through specifics of implementation and pros and cons of each model.
+In this session, we will start by covering the principles of enterprise configuration management in Drupal. Then, we’ll dig into several different models for configuration management, talking through specifics of implementation and pros and cons of each model.
 
 Last, we’ll take a comprehensive look at the models in practice. We’ll look at the challenges of scaling, legal compliance, and permissions that many organizations face.
 
