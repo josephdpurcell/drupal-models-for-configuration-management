@@ -6,8 +6,289 @@
 
     <title>2020-07-25-DrupalCon-Global</title>
 
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/bounteous.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+<style>
+.reveal h1 {
+  font-size: 2.5em;
+}
+.flex-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+.flex-container > div {
+  flex-grow: 2;
+  flex: 2 50%;
+}
+
+.reveal .slides section mark.fragment:not(.current-fragment):not(.visible) {
+  opacity: 1;
+  visibility: visible;
+  background: none;
+  color: inherit;
+}
+.reveal .slides section mark {
+  background: #fff47e;
+}
+.reveal .slides section mark.alert {
+  background: #fe9595;
+}
+.reveal .slides section mark.visible,
+.reveal .slides section mark.visible .hljs-title,
+.reveal .slides section mark.visible .hljs-name,
+.reveal .slides section mark.visible .hljs-selector-id,
+.reveal .slides section mark.visible .hljs-selector-class,
+.reveal .slides section mark.visible .hljs-section,
+.reveal .slides section mark.visible .hljs-type,
+.reveal .slides section mark.visible .hljs-string,
+.reveal .slides section mark.visible .hljs-keyword {
+  color: #333;
+}
+</style>
   </head>
   <body>
-    <h1>Hello!</h1>
+    <div class="reveal">
+      <div class="slides">
+
+<!--
+
+Outline:
+
+  1. Intro
+    a. Who am I
+    b. Who are you
+    c. Story
+    d. Overview
+  2. Principles of enterprise configuration management in Drupal
+  3. Dig into the different models, specifics of implementation and pros/cons
+  4. Comprehensive look at models in practice; challenges
+
+-->
+
+        <!-- SECTION 1: Intro -->
+        <section>
+
+          <section>
+            <h1>Models of Configuration Management</h1>
+            <div class="flex-container">
+              <div>
+                <p>by Joseph D. Purcell</p>
+              </div>
+              <div>
+                <p>at DrupalCon Global</p>
+              </div>
+              <div>
+                <small><a href="https://www.linkedin.com/in/josephdpurcell">@josephdpurcell</a></small>
+              </div>
+              <div>
+                <small>July 15, 2020</small>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2>Who am I?</h2>
+            <ul>
+              <li>PHP developer since 2004</li>
+              <li>Lead Architect at Bounteous</li>
+            </ul>
+            <br/>
+            <p>
+              <small><i>We're hiring: <a href="https://www.bounteous.com/careers/">bounteous.com/careers</a></i></small>
+            </p>
+            <aside class="notes">
+              <ul>
+                <li>its not 2003, it was 2004!</li>
+                <li>we're hiring</li>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h2>Who are you?</h2>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h2>Story</h2>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h2>Takeaways:</h2>
+            <ol>
+              <li class="fragment">One.</li>
+              <li class="fragment">Two.</li>
+            </ol>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h1>Overview</h1>
+            <ol style="list-style-type:upper-roman">
+              <li>Principles of Config Management</li>
+              <li>Models of Config Management</li>
+              <li>Challenges In Practice</li>
+            </ol>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+        </section>
+
+<!--
+===============================================================================
+               Part I. Principles of Config Management
+===============================================================================
+-->
+
+        <section>
+
+          <section>
+            <h2>I. Principles of Config Management</h2>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+        </section>
+
+<!--
+===============================================================================
+               Part II. Models of Config Management
+===============================================================================
+-->
+
+        <section>
+
+          <section>
+            <h2>II. Models of Config Management</h2>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+        <section>
+
+<!--
+===============================================================================
+              Part III. Challenges In Practice
+===============================================================================
+-->
+
+        <section>
+
+          <section>
+            <h2>III. Challenges In Practice</h2>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+        <section>
+
+<!--
+===============================================================================
+                               Conclusion
+===============================================================================
+-->
+
+        <section>
+
+          <section>
+            <h2>Conclusion</h2>
+          </section>
+
+        </section>
+
+<!--
+===============================================================================
+                          Thank You!
+===============================================================================
+-->
+
+        <section>
+
+          <section>
+            <h2>Thank you!</h2>
+            <p>Please provide feedback:<br><a href="https://events.drupal.org/global2020/sessions/models-configuration-management">events.drupal.org/global2020/sessions/models-configuration-management</a></p>
+            <br/>
+            <p>Slides are available:<br><a href="https://github.com/josephdpurcell/drupal-models-for-configuration-management">github.com/josephdpurcell/drupal-models-for-configuration-management</a></p>
+            <p>Let's talk! <a href="https://www.linkedin.com/in/josephdpurcell/">@josephdpurcell</a></p>
+          </section>
+
+          <section>
+            <h3>References</h3>
+
+            <ul style="font-size:80%">
+            </ul>
+
+            <aside class="notes">
+            </aside>
+          </section>
+
+          <section>
+            <h3>Further Reading</h3>
+
+            <ul style="font-size:80%">
+            </ul>
+
+            <aside class="notes">
+            </aside>
+          </section>
+
+        </section>
+
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        history: true,
+
+        // More info https://github.com/hakimel/reveal.js#dependencies
+        dependencies: [
+          { src: 'plugin/markdown/marked.js' },
+          { src: 'plugin/markdown/markdown.js' },
+          { src: 'plugin/notes/notes.js', async: true },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+        ]
+      });
+    </script>
+    <aside class="logo-footer">
+      <a href="https://www.bounteous.com/">
+        <img src="assets/bounteous.svg">
+      </a>
+    </aside>
   </body>
 </html>
