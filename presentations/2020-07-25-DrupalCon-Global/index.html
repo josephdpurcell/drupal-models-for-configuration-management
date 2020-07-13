@@ -21,6 +21,9 @@
       document.getElementsByTagName( 'head' )[0].appendChild( link );
     </script>
 <style>
+section img {
+  border: none !important;
+}
 .reveal h1 {
   font-size: 2.5em;
 }
@@ -73,8 +76,9 @@ Outline:
     c. Story
     d. Overview
   2. Principles of enterprise configuration management in Drupal
-  3. Dig into the different models, specifics of implementation and pros/cons
-  4. Comprehensive look at models in practice; challenges
+  3. Synchronization Models: Dig into the different models, specifics of implementation and pros/cons
+  4. Split Models: Dig into the different models, specifics of implementation and pros/cons
+  5. Comprehensive look at models in practice; challenges
 
 -->
 
@@ -136,8 +140,10 @@ Outline:
           <section>
             <h2>Takeaways:</h2>
             <ol>
-              <li class="fragment">One.</li>
-              <li class="fragment">Two.</li>
+              <li class="fragment">4 Config Synchronization Models</li>
+              <li class="fragment">4 Config Split Models</li>
+              <li class="fragment">5 ways a config can be split</li>
+              <li class="fragment">How to make decisions about the above</li>
             </ol>
             <aside class="notes">
               <ul>
@@ -149,7 +155,8 @@ Outline:
             <h1>Overview</h1>
             <ol style="list-style-type:upper-roman">
               <li>Principles of Config Management</li>
-              <li>Models of Config Management</li>
+              <li>Config Synchronization Models</li>
+              <li>Config Split Models</li>
               <li>Challenges In Practice</li>
             </ol>
             <aside class="notes">
@@ -175,25 +182,508 @@ Outline:
             </aside>
           </section>
 
-        </section>
-
-<!--
-===============================================================================
-               Part II. Models of Config Management
-===============================================================================
--->
-
-        <section>
-
           <section>
-            <h2>II. Models of Config Management</h2>
+            <h3>What is configuration?</h3>
             <aside class="notes">
               <ul>
               </ul>
             </aside>
           </section>
 
+          <section>
+            <h3>Configuration is...</h3>
+            <ul>
+              <li>Site configurations (site name, performance settings)</li>
+              <li>Schema (content types, fields, etc)</li>
+              <li>Plugin configs (payment methods, SOLR)</li>
+              <li>Content (page manager, block placement)</li>
+            </ul>
+            <p class="fragment">... it’s a little squishy.</p>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h3>Why does it need managed??</h3>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h3>What happens when you don't...</h3>
+            <ol>
+              <li>Have you ever made schema changes manually on PROD because you didn’t have a good way to script them?</li>
+              <li>Have you worked with Magento, WordPress, Oro, or pretty much any framework without a config manager?</li>
+              <li>Have you used Drupal 7 features?</li>
+            </ol>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <img src="assets/works-on-my-machine.jpg" />
+            <p>Oh, I forgot to tell you some manual steps...</p>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h3>Basics of Drupal Configuration Management</h3>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>By default, all configuration is managed.</h4>
+            <pre>
+            drush cim sync
+            drush dex sync
+            </pre>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Managed vs Unmanaged Configuration</h4>
+            <ul>
+              <li><b>Managed:</b> Config that is under version control and deployed, it is imported and exported. (default)</li>
+              <li><b>Unmanaged:</b> Config that is treated as state in the database, it is ignored by import/export.</li>
+            </ul>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Clean configuration</h4>
+            <p>When the managed configuration in the database exactly matches that in version control.</p>
+            <pre>
+            drush config-status
+            </pre>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Synchronization directory</h4>
+            <p>The location a site imports from and exports to by default; there is only one.</p>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Split directory</h4>
+            <p>The location of configuration that, when enabled, merges into the synchronized config; there can be many.</p>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h3>Now, some principles...</h3>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Principle 1: Manage your config.</h4>
+            <p>A corrolary says this:</p>
+            <blockquote>
+              Always version your database.<br>
+              <span class="attribution">&mdash; K. Scott Allen</span>
+            </blockquote>
+            <p>This means use the config management system, which could be at the site level, install profile level, or core/contrib level.</p>
+            <p>This is why update hooks exist!</p>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Principle 2: Config that changes should be unmanaged.</h4>
+            <p>Use config ignore and config export ignore to remove config that changes.</p>
+            <p>Some examples:</p>
+            <ul>
+              <li>Block placement (block.block.*)</li>
+              <li>Modules that are using config instead of state (key/value), e.g. Acquia's Connector which was recently fixed</li>
+              <li>Config you want a site admin to edit live (webform.*, tb_megamenu.menu_config.*)</li>
+            </ul>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Principle 3: Keep production config clean.</h4>
+            <p>Never edit managed config on production.</p>
+            <pre>
+            drush config-status
+            </pre>
+            <p>This should always show no changes.</p>
+            <p>If there are changes, either allow it to be reverted on deploy or export the values to the canonical store of config.</p>
+            <p>Consider using config readonly.</p>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Principle 4: Declare 1 canonical source of managed config.</h4>
+            <p>Typically, this is the "develop" branch. All changes branch off the canonical and are merged back into it, just like any other code changes.</p>
+            <p>Note: production's database is canonical only for unmanaged config!</p>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Principle 5: Reset your local config to the canonical before making changes.</h4>
+            <p>Consider a "reset" script that is run every time you change branches:</p>
+            <ul>
+              <li>Run composer install</li>
+              <li>Copy canonical database into your local</li>
+              <li>Run database updates (drush updb)</li>
+              <li>Run config import, twice (drush cim sync)</li>
+              <li>Now, you are ready to make changes</li>
+            </ul>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Principle 6: Import config twice on deploy</h4>
+            <p>Changes to how your config is managed are not reflected until the second import.</p>
+            <p>(I've not seen any indication this will change.)</p>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Principle 7: All sites sharing config synchronization should be 80%.</h4>
+            <p>If using a configuration sync directory with multiple sites, there should be 80% overlap between the sites functionality.</p>
+            <p>Otherwise, have each site with its own config sync directory or manage a very small amount of config in a profile.</p>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Principle 8: Commodity sites should have few managed configs, Collectibles should have many.</h4>
+            <p>A "Commodity" site is the primary use case of Acquia Site Factory (ACSF). You install a site profile and some modules and let a Site Builder role take over. In this case, manage as little config as possible.</p>
+            <p>A "Collectible" site is what most people are used to. You install a site profile, but iterate over the site's configuration. You want to manage as much as possible for quality control.</p>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h3>Two categories of config models:</h3>
+            <ul>
+              <li><b>Synchronization Models:</b> for your site's entire set of config.</li>
+              <li><b>Split Models:</b> for splitting out differences on a module or config-entity level (e.g. per-environment split of dblog).</li>
+            </ul>
+            <p class="fragment">Pick 1 synchronization model, layer on split models as you like.</p>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+
+        </section>
+
+<!--
+===============================================================================
+               Part II. Configuration Synchronization Models
+===============================================================================
+-->
+
         <section>
+
+          <section>
+            <h2>Configuration Synchronization Models</h2>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h3>Config Synchronization Models</h3>
+            <ol>
+              <li>Globally Shared Management (default): All sites share the config set.</li>
+              <li>Profile Shared Management: All sites of the same profile share the config set.</li>
+              <li>Separate Management: All sites have their own config set.</li>
+              <li>Unmanaged: No configurations are managed in code.</li>
+            </ol>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Model 1: Globally Shared Management</h4>
+            <img src="assets/Config_Management_Model_1__Globally_Shared_Management.png" width="80%" />
+            <p>This is the default model.</p>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Model 2: Profile Shared Management</h4>
+            <img src="assets/Config_Management_Model_2__Profile_Shared_Management.png" width="80%" />
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Model 3: Separate Management</h4>
+            <img src="assets/Config_Management_Model_3__Separate_Management.png" width="80%" />
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Model 4: Unmanaged</h4>
+            <img src="assets/Config_Management_Model_4__Unmanaged.png" width="80%" />
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+        </section>
+
+<!--
+===============================================================================
+               Part III. Config Split Models
+===============================================================================
+-->
+        <section>
+
+          <section>
+            <h3>Config Split Models</h3>
+            <ol>
+              <li>Environment Splits: Allows DEV to have different config than PRD.</li>
+              <li>Site Splits: Allows sites to have different config than what is in synchronization.</li>
+              <li>Profile Splits: Allows all sites of a given profile to have different config than what is in synchronization.</li>
+              <li>Module Splits: Allows sites with a given module to have different config than what is in synchronization.</li>
+            </ol>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Synchronization Models and Split Models Work Together</h4>
+            <table>
+              <thead>
+                <tr>
+                  <th>&nbsp;</th>
+                  <th>Env Splits</th>
+                  <th>Site Splits</th>
+                  <th>Profile Splits</th>
+                  <th>Module Splits</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Globally Shared</td>
+                  <td>✅</td>
+                  <td>✅</td>
+                  <td>✅</td>
+                  <td>✅</td>
+                </tr>
+                <tr>
+                  <td>Profile Shared</td>
+                  <td>✅</td>
+                  <td>✅</td>
+                  <td>🚫</td>
+                  <td>✅</td>
+                </tr>
+                <tr>
+                  <td>Separate</td>
+                  <td>✅</td>
+                  <td>🚫</td>
+                  <td>✅</td>
+                  <td>✅</td>
+                </tr>
+                <tr>
+                  <td>Unmanaged</td>
+                  <td>🚫</td>
+                  <td>🚫</td>
+                  <td>🚫</td>
+                  <td>🚫</td>
+                </tr>
+              </tbody>
+            </table>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Let's look at 4 examples...</h4>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>1: Environment Splits with Globally Shared Management</h4>
+            <img src="assets/Config_Management_Model_1__Globally_Shared_Management_-_Environment_Splits.png" width="80%" />
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>2: Profile Splits with Globally Shared Management</h4>
+            <img src="assets/Config_Management_Model_1__Globally_Shared_Management_-_Profile_Splits.png" width="80%" />
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>3: Site Splits with Globally Shared Management</h4>
+            <img src="assets/Config_Management_Model_1__Globally_Shared_Management_-_Site_Splits.png" width="80%" />
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>4: Site Splits with Profile Shared Management</h4>
+            <img src="assets/Config_Management_Model_2__Profile_Shared_Management_-_Site_Splits.png" width="80%" />
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <p>You can't talk about config split models without getting into split types...</p>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h3>5 ways a config entity can be split.</h3>
+            <p>With each of the split examples, on a per-module or per-config entity basis you choose between these options:</p>
+            <ol>
+              <li><b>No Split (default):</b> The config entity is always in synchronization, it never splits. (default)</li>
+              <li><b>Complete Module Split:</b> The module is only enabled when that split is active, and all of its config entities only exist when the split is active.</li>
+              <li><b>Complete Entity Split:</b> The entity is never in synchronization, it only exists when the split is active.</li>
+              <li><b>Conditional Entity Split:</b> The entity is always in synchronization, it only splits if its different than synchronization.</li>
+              <li><b>Unmanaged:</b> The config entity is never in synchronization or splits, it only exists in the database.</li>
+            </ol>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Look at examples with Profile Shared Management and Site Splits</h4>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>No Split (default)</h4>
+            <img src="assets/Config_Splits__Default.png" width="80%" />
+            <p>All config imports and exports to synchronization directory.</p>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Complete Module Split</h4>
+            <img src="assets/Config_Splits__Module_complete_split.png" width="80%" />
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Complete Entity Split</h4>
+            <img src="assets/Config_Splits__Config_entity_complete_split.png" width="80%" />
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Conditional Entity Split</h4>
+            <img src="assets/Config_Splits__Config_entity_conditional_split.png" width="80%" />
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Unmanaged</h4>
+            <img src="assets/Config_Splits__Unmanaged_config_entity.png" width="80%" />
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+        </section>
 
 <!--
 ===============================================================================
@@ -211,7 +701,67 @@ Outline:
             </aside>
           </section>
 
-        <section>
+          <section>
+            <h3>Which Synchronization Model should you use?</h3>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <img src="assets/Configuration_Management__Synchronization_Models_Comparison.png" width="80%" />
+            <aside class="notes">
+              <ul>
+                <li>Separate: works well for managing lots of config for a few sites < 10</li>
+                <li>Globally shared: works well for managing a few configs for many sites < 20; youll want splits</li>
+                <li>Profile Shared: works well for managing a few configs for a lot of sites < 100</li>
+                <li>Unmanaged: works well for 1,000s of sites</li>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h3>Common gotchas...</h3>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <p>UUIDs causing config entity to be re-created. Usually harmless, unless your config is unclean on PROD.</p>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <p>A split is accidentally enabled. Easy workaround is to set all sppt statuses as FALSE in settings.php before your logic to enable them.</p>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <p>How do you decide whether to split a config vs make it managed vs make it unmanaged?</p>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <img src="assets/Config_Splits__Decision_Tree_for_Managed__Splits__and_Unmanaged_Config.png" width="80%" />
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+        </section>
 
 <!--
 ===============================================================================
@@ -222,7 +772,59 @@ Outline:
         <section>
 
           <section>
-            <h2>Conclusion</h2>
+            <h2>Recap</h2>
+          </section>
+
+          <section>
+            <h3>4 Config Synchronization Models</h3>
+            <ol>
+              <li>Globally Shared Management (default): All sites share the config set.</li>
+              <li>Profile Shared Management: All sites of the same profile share the config set.</li>
+              <li>Separate Management: All sites have their own config set.</li>
+              <li>Unmanaged: No configurations are managed in code.</li>
+            </ol>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h3>4 Config Split Models</h3>
+            <ol>
+              <li>Environment Splits: Allows DEV to have different config than PRD.</li>
+              <li>Site Splits: Allows sites to have different config than what is in synchronization.</li>
+              <li>Profile Splits: Allows all sites of a given profile to have different config than what is in synchronization.</li>
+              <li>Module Splits: Allows sites with a given module to have different config than what is in synchronization.</li>
+            </ol>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h3>5 ways a config entity can be split.</h3>
+            <p>With each of the split examples, on a per-module or per-config entity basis you choose between these options:</p>
+            <ol>
+              <li><b>No Split (default):</b> The config entity is always in synchronization, it never splits. (default)</li>
+              <li><b>Complete Module Split:</b> The module is only enabled when that split is active, and all of its config entities only exist when the split is active.</li>
+              <li><b>Complete Entity Split:</b> The entity is never in synchronization, it only exists when the split is active.</li>
+              <li><b>Conditional Entity Split:</b> The entity is always in synchronization, it only splits if its different than synchronization.</li>
+              <li><b>Unmanaged:</b> The config entity is never in synchronization or splits, it only exists in the database.</li>
+            </ol>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h3>Refer back to our decision aids...</h3>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
           </section>
 
         </section>
@@ -239,10 +841,11 @@ Outline:
             <h2>Thank you!</h2>
             <p>Please provide feedback:<br><a href="https://events.drupal.org/global2020/sessions/models-configuration-management">events.drupal.org/global2020/sessions/models-configuration-management</a></p>
             <br/>
-            <p>Slides are available:<br><a href="https://github.com/josephdpurcell/drupal-models-for-configuration-management">github.com/josephdpurcell/drupal-models-for-configuration-management</a></p>
+            <p>Slides are available:<br><a href="https://github.com/josephdpurcell/drupal-models-for-configuration-management">github.com/josephdpurcell</a></p>
             <p>Let's talk! <a href="https://www.linkedin.com/in/josephdpurcell/">@josephdpurcell</a></p>
           </section>
 
+<!--
           <section>
             <h3>References</h3>
 
@@ -262,6 +865,7 @@ Outline:
             <aside class="notes">
             </aside>
           </section>
+-->
 
         </section>
 
