@@ -114,13 +114,9 @@ Outline:
               <li>Lead Architect at Bounteous</li>
             </ul>
             <br/>
-            <p>
-              <small><i>We're hiring: <a href="https://www.bounteous.com/careers/">bounteous.com/careers</a></i></small>
-            </p>
             <aside class="notes">
               <ul>
                 <li>its not 2003, it was 2004!</li>
-                <li>we're hiring</li>
               </ul>
             </aside>
           </section>
@@ -490,9 +486,14 @@ Outline:
           </section>
 
           <section>
-            <h4>Principle 7: Import config twice on deploy</h4>
-            <p>Changes to how your config is managed are not reflected until the second import.</p>
-            <p>(I've not seen any indication this will change.)</p>
+            <h4>Principle 7: Import config twice on deploy.</h4>
+            <pre><code class="nohighlight">
+  drush cim sync -y || drush cim sync -y
+  drush cim sync -y 
+            </code></pre>
+            <p class="fragment"><b>Line 1:</b> Import but allow it to fail using the <code>||</code> trick<br>(there are caching issues when modules are enabled)</p>
+            <p class="fragment"><b>Line 2</b> Import to reflect changes in how config is imported (config split)</p>
+            <p class="fragment">I've not seen any indication this will change.</p>
             <aside class="notes">
               <ul>
               </ul>
@@ -512,7 +513,7 @@ Outline:
           </section>
 
           <section>
-            <h4>Principle 9: Managed config does not scale well with number of sites.</h4>
+            <h4>Principle 9: Managed config does not scale well with # of sites.</h4>
             <div style="text-align:left;display:block">
             <p><b>1 site:</b> &gt; 90% managed config ("Collectible" sites)</p>
             <p><b>2-5 sites:</b> 80% managed config</p>
