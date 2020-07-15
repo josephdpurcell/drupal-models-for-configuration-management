@@ -409,12 +409,14 @@ Outline:
             </code></pre>
             <p>There is only 1 per site.</p>
             <p>By default, all config exports to and imports from here.</p>
+<!--
             <div class="fragment">
               <p>If you're using config set per-profile it might look like this:</p>
               <pre style="width:108%;margin-left:-4%;"><code class="php">
   $settings['config_sync_directory'] = "../docroot/profiles/custom/{$profile_name}/config/sync";
               </code></pre>
             </div>
+-->
             <aside class="notes">
               <ul>
               </ul>
@@ -435,6 +437,7 @@ Outline:
               <li>An enviornment (e.g. DEV)</li>
               <li>A site (e.g. in a multisite scenario)</li>
               <li>An install profile</li>
+              <li>A grouping of functionality (e.g. a module)</li>
             </ul>
             <aside class="notes">
               <ul>
@@ -461,8 +464,9 @@ Outline:
             <h3>Principle 6: Config flows from local to production.</h3>
             <p>Your primary development branch is the canonical source of configuration.</p>
             <p>All changes branch off the canonical and are merged back into it, just like any other code changes.</p>
-            <p>This implies you run config import on deploy.</p>
+<!--
             <p class="fragment">Note: production's database is canonical only for unmanaged config!</p>
+-->
             <aside class="notes">
               <ul>
               </ul>
@@ -500,6 +504,7 @@ Outline:
             </aside>
           </section>
 
+<!--
           <section>
             <h3>Principle 8:<br>80% of a default config set should be shared by all sites.</h3>
             <p>Example: 12 content types, 10 are managed, 2 are unmanaged.</p>
@@ -525,6 +530,7 @@ Outline:
               </ul>
             </aside>
           </section>
+-->
 
           <section>
             <h2>Get ready for the main event!</h4>
@@ -803,6 +809,32 @@ Outline:
           </section>
 
           <section>
+            <h3>80% of a default config set should be shared by all sites.</h3>
+            <p>Example: 12 content types, 10 are managed, 2 are unmanaged.</p>
+            <p>At least 8 should be in your default config set (synchronization directory).</p>
+            <p>Math: 8 / (12 - 2) = 80%</p>
+            <p>(This proxy guideline for how difficult it will be to manage the application.)</p>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
+            <h4>Managed config does not scale well with # of sites.</h4>
+            <div style="text-align:left;display:block">
+            <p><b>1 site:</b> &gt; 90% managed config ("Collectible" sites)</p>
+            <p><b>2-5 sites:</b> 80% managed config</p>
+            <p><b>6-20 sites:</b> 40% managed config</p>
+            <p><b>20+ sites:</b> &lt; 20% managed config ("Commodity" sites)</p>
+            </div>
+            <aside class="notes">
+              <ul>
+              </ul>
+            </aside>
+          </section>
+
+          <section>
             <img src="assets/Configuration_Management__Synchronization_Models_Comparison.png" />
             <aside class="notes">
               <ul>
@@ -1025,21 +1057,20 @@ Outline:
             <aside class="notes">
             </aside>
           </section>
+-->
 
           <section>
             <h3>Further Reading</h3>
-            https://www.drupal.org/project/config_split/issues/2962511#comment-12595892 - explains why cim twice
-            handbook on deploys https://docs.google.com/document/d/1WpJFWbYvfgco-QpyOz8F8wNvN4uelvsIKgEWA-XyZW0/edit#heading=h.40gi5ln6lblb
-            my auto deploy blogs
-
-
             <ul style="font-size:80%">
+              <li><a href="https://www.drupal.org/project/config_split/issues/2962511#comment-12595892">Import 'config_split.config_split.*' after installing the module in order correct pass through the next import</a>" (drupal.org issue)</li>
+              <li><a href="https://www.bounteous.com/insights/2020/03/11/automate-drupal-deployments/#deploy-to-production">How to Automate Drupal Deployments with Rollback</a></li>
+              <li><a href="https://www.drupal.org/project/cmi2">Drupal core - Configuration Management 2.0 initiative</a></li>
+              <li><a href="https://groups.drupal.org/node/140144">Getting off the island - Research into other systems</a></li>
+              <li><a href="https://www.bounteous.com/insights/2018/04/24/level-up-your-drupal-8-configuration-management/">Level Up Your Drupal 8 Configuration Management – Make Drupal Configuration Work the Way You Do!</a></li>
             </ul>
-
             <aside class="notes">
             </aside>
           </section>
--->
 
         </section>
 
